@@ -1,0 +1,123 @@
+1. Splash Screen
+
+    App logo + short loading animation.
+
+    Optionally checks if the user is logged in or not.
+
+2. Onboarding Screens
+
+Explain the app’s purpose (save and organize docs).
+
+Simple slides: “Store securely”, “Organize easily”, “Access anytime”.
+
+3. Login / Sign Up Page
+
+Email + password (or biometrics, Google/Apple login).
+
+Option to skip (for offline/local mode, if you want that).
+
+4. Home Page (Dashboard)
+
+Quick overview of categories:
+
+School 📘
+
+Administration 🧾
+
+Applications 💼
+
+Bank 💳
+
+Quick add button (“+”) to upload a new document.
+
+Recent uploads and maybe a storage usage indicator.
+
+📂 Document Management
+5. Categories Page
+
+Lists all document categories.
+
+Each category can have a thumbnail or icon.
+
+6. Category Detail Page
+
+Shows documents only in that category (e.g., “Bank Documents”).
+
+Filter/sort (by date, name, type).
+
+Add/Edit/Delete documents.
+
+7. Document Detail Page
+
+Preview of the file (PDF/image).
+
+Metadata (title, date added, category, tags).
+
+Options: rename, move to another category, share, download, or delete.
+
+8. Add / Upload Document Page
+
+Choose from gallery, camera, or file system.
+
+Add details (title, category, notes, tags).
+
+Optionally: auto-scan using OCR or AI file naming.
+
+🔍 Utility Pages
+9. Search Page
+
+Search by document name, tag, or category.
+
+Filter by type or upload date.
+
+10. Favorites / Starred Page
+
+Quick access to most important docs (like ID card, diplomas, etc.).
+
+11. Trash / Recently Deleted Page
+
+Soft-delete feature to recover accidentally removed files.
+
+⚙️ Settings and Account
+12. Settings Page
+
+Theme (dark/light).
+
+Language.
+
+Notification preferences.
+
+Storage management (local vs. cloud).
+
+13. Profile / Account Page
+
+View account info.
+
+Backup/sync settings (Google Drive, iCloud, etc.).
+
+Log out button.
+
+🧠 (Optional but Nice Additions)
+14. Reminders / Expiry Tracker
+
+For documents with expiry dates (ID, insurance, etc.).
+
+Notifications before they expire.
+
+15. Analytics / Insights Page
+
+Graph of document uploads over time.
+
+Category distribution (e.g., 40% school, 30% bank).
+
+16. Security Page
+
+Manage PIN, Face ID, fingerprint.
+
+Encryption options (if you store sensitive docs).
+
+17. Help / FAQ / Contact Page
+
+Tips for organization.
+
+Contact support or send feedback.
