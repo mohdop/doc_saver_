@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';
+import 'dart:io';
 
 class add_document extends StatefulWidget {
   const add_document({super.key});
@@ -10,7 +12,61 @@ class add_document extends StatefulWidget {
 class _add_documentState extends State<add_document> {
   String? selectedDocumentType;
   TextEditingController documentNameController = TextEditingController();
+  File? selectedFile;
+  String? fileName;
   
+  // Function to pick file
+  Future<void> pickFile() async {
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'jpg', 'jpeg', 'png', 'mp4', 'avi', 'txt'],
+      );
+
+      if (result != null) {
+        setState(() {
+          selectedFile = File(result.files.single.path!);
+          fileName = result.files.single.name;
+          
+          // Auto-fill document name if empty
+          if (documentNameController.text.isEmpty) {
+            documentNameController.text = fileName!.split('.').first;
+          }
+          
+          // Auto-select document type based on extension
+          String extension = result.files.single.extension ?? '';
+          if (['pdf'].contains(extension)) {
+            selectedDocumentType = 'PDF';
+          } else if (['doc', 'docx'].contains(extension)) {
+            selectedDocumentType = 'Word';
+          } else if (['xls', 'xlsx'].contains(extension)) {
+            selectedDocumentType = 'Excel';
+          } else if (['jpg', 'jpeg', 'png'].contains(extension)) {
+            selectedDocumentType = 'Image';
+          } else if (['mp4', 'avi'].contains(extension)) {
+            selectedDocumentType = 'Video';
+          } else {
+            selectedDocumentType = 'Other';
+          }
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('File selected: $fileName'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error picking file: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
   final List<Map<String, dynamic>> documentTypes = [
     {'name': 'PDF', 'icon': Icons.picture_as_pdf, 'color': Colors.red},
     {'name': 'Word', 'icon': Icons.description, 'color': Colors.blue},
@@ -173,10 +229,10 @@ class _add_documentState extends State<add_document> {
               width: double.infinity,
               height: 120,
               decoration: BoxDecoration(
-                color: Colors.blue.shade50,
+                color: selectedFile != null ? Colors.green.shade50 : Colors.blue.shade50,
                 borderRadius: BorderRadius.circular(15),
                 border: Border.all(
-                  color: Colors.blue.shade200,
+                  color: selectedFile != null ? Colors.green.shade200 : Colors.blue.shade200,
                   width: 2,
                   style: BorderStyle.solid,
                 ),
@@ -185,34 +241,41 @@ class _add_documentState extends State<add_document> {
                 color: Colors.transparent,
                 child: InkWell(
                   borderRadius: BorderRadius.circular(15),
-                  onTap: () {
-                    // Handle file picker
-                    print('Open file picker');
-                  },
+                  onTap: pickFile,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(
-                        Icons.cloud_upload,
+                        selectedFile != null ? Icons.check_circle : Icons.cloud_upload,
                         size: 50,
-                        color: Colors.blue,
+                        color: selectedFile != null ? Colors.green : Colors.blue,
                       ),
                       SizedBox(height: 10),
                       Text(
-                        'Tap to browse files',
+                        selectedFile != null ? fileName! : 'Tap to browse files',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
-                          color: Colors.blue,
+                          color: selectedFile != null ? Colors.green : Colors.blue,
                         ),
+                        textAlign: TextAlign.center,
                       ),
-                      Text(
-                        'or drag and drop here',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey.shade600,
+                      if (selectedFile == null)
+                        Text(
+                          'or drag and drop here',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey.shade600,
+                          ),
                         ),
-                      ),
+                      if (selectedFile != null)
+                        Text(
+                          'Tap to change file',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey.shade600,
+                          ),
+                        ),
                     ],
                   ),
                 ),
@@ -240,8 +303,19 @@ class _add_documentState extends State<add_document> {
                     );
                     return;
                   }
+                  if (selectedFile == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Please select a file')),
+                    );
+                    return;
+                  }
                   
-                  // Success
+                  // Success - Here you would save the file to your database/storage
+                  print('Saving document:');
+                  print('Name: ${documentNameController.text}');
+                  print('Type: $selectedDocumentType');
+                  print('File path: ${selectedFile!.path}');
+                  
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text('Document added successfully!'),
@@ -253,6 +327,8 @@ class _add_documentState extends State<add_document> {
                   documentNameController.clear();
                   setState(() {
                     selectedDocumentType = null;
+                    selectedFile = null;
+                    fileName = null;
                   });
                 },
                 style: ElevatedButton.styleFrom(

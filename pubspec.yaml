@@ -38,6 +38,7 @@ dependencies:
   smooth_page_indicator: ^1.2.1
   flutter_slidable: ^4.0.3
   google_nav_bar: ^5.0.7
+  file_picker: ^10.3.3
 
 dev_dependencies:
   flutter_test:
